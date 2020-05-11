@@ -1,0 +1,61 @@
+<div class="col col-sm-12" *ngIf="!postulate && !categories">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="col col-sm-12 col-lg-8 mt-4" style="margin: auto;" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+	<span *ngIf="validationMessage">{{ validationMessage }}</span>
+</div>
+<div class="backLink col-sm-12 col-lg-8" *ngIf="postulate && categories"><a href="javascript:history.back()">Regresar</a></div>
+<div class="formContainer col-sm-12 col-lg-8" *ngIf="postulate && categories">
+	<h2 class="formTitle mb-4">{{ page_title }}</h2>
+	<form #postulateRegisterForm="ngForm" class="form-container" (ngSubmit)="onSubmit(postulateRegisterForm)">
+		<div class="form-group col col-sm-12">
+			<label for="id_number" class="labelForm">Número de documento*</label>
+			<input type="text" name="id_number" id="id_number" class="form-control inputForm" [ngClass]="{'is-invalid': id_number.invalid && id_number.touched}" #id_number="ngModel" [(ngModel)]="postulate.id_number" required pattern="[0-9]+" placeholder="Ingrese el número de documento del postulado" maxlength="12">
+			<small class="invalid-feedback d-block" *ngIf="id_number.invalid && id_number.touched">Debe ingresar un número de documento válido. Solo se admiten números</small>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-12 col-md-12 col-lg-6 d-inline-block">
+				<label for="name" class="labelForm">Nombres*</label>
+				<input type="text" name="name" id="name" class="form-control inputForm" [ngClass]="{'is-invalid': name.invalid && name.touched}" #name="ngModel" [(ngModel)]="postulate.name" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ingrese los nombres del usuario">
+			</div>
+			<div class="col-sm-12 col-md-12 col-lg-6 d-inline-block">
+				<label for="surname" class="labelForm">Apellidos*</label>
+				<input type="text" name="surname" id="surname" class="form-control inputForm" [ngClass]="{'is-invalid': surname.invalid && surname.touched}" #surname="ngModel" [(ngModel)]="postulate.surname" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ingrese los apellidos del usuario">
+			</div>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="name.invalid && name.touched">Debe ingresar correctamente los nombres del usuario. Solo se admiten letras en el campo</small>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="surname.invalid && surname.touched">Debe ingresar correctamente los apellidos del usuario. Solo se admiten letras en el campo</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<label for="description" class="labelForm">Descripción*</label>
+			<input type="text" name="description" id="description" class="form-control inputForm" [ngClass]="{'is-invalid': description.invalid && description.touched}" #description="ngModel" [(ngModel)]="postulate.description" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ingrese la descripción del usuario" maxlength="100">
+			<small class="invalid-feedback d-block" *ngIf="description.invalid && description.touched">Debe ingresar una descripción válida. Solo se admiten letras.</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<label for="voteCategory" class="labelForm">Categoría de Votación*</label>
+			<select style="background-position-x: 96%" name="voteCategory" id="voteCategory" class="form-control inputForm" [ngClass]="{'is-invalid': voteCategory.invalid && voteCategory.touched}" #voteCategory="ngModel" [(ngModel)]="postulate.votes_category_id" required>
+				<option *ngFor="let category of categories" value="{{ category.id }}">{{ category.name }}</option>
+			</select>
+			<small class="invalid-feedback d-block" *ngIf="voteCategory.invalid && voteCategory.touched">Debe seleccionar una categoría de la lista</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<label for="text" class="labelForm">Foto</label>
+			<app-document-register (sendName)="receiveName($event)"
+								   [resetVar]="this.resetVar"></app-document-register>
+		</div>
+
+		<div class="buttonSubmit col-sm-12">
+			<input type="submit" value="Crear Usuario" class="btn btn-success btnPrefer col-sm-12 col-md-8 col-lg-6" [disabled]="postulateRegisterForm.invalid">
+		</div>
+		<div id="preloaderDisco" *ngIf="preloaderStatus"></div>
+		<div class="col col-sm-12 info">
+			<small>Los campos marcados con * son obligatorios</small>
+		</div>
+	</form>
+</div>

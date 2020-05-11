@@ -1,0 +1,89 @@
+<div class="col col-sm-12" *ngIf="(!postulates && !responseMessage && !voteMessage && verifyFlag) || preloaderStatus">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="backLink d-inline-block col-sm-6 p-0" *ngIf="postulates && !preloaderStatus || responseMessage || !verifyFlag || !authorization">
+	<a class="" href="javascript:history.back()">Regresar</a>
+</div>
+<div class="col col-sm-12 mt-4" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+</div>
+<div class="mb-4" *ngIf="!postulates"></div>
+<div class="postulatePrincipalContainer" *ngIf="category && !preloaderStatus">
+	<h2 class="formTitle" style="text-transform: capitalize;" *ngIf="voteMessage || voteRegister || postulates || !verifyFlag">{{ page_title }}</h2>
+	<div class="doubleVote col col-sm-8" *ngIf="voteMessage && !authorization">
+		<div class="checkVote mb-4">
+			{{ voteMessage }}
+		</div>
+		<div class="col col-sm-12 col-md-5 m-auto">
+			<button class="btn btn-danger btn-danger-red w-100" [routerLink]="['/logout/1']">Cerrar Sesión</button>
+		</div>
+	</div>
+	<div class="registerVote col col-sm-8" *ngIf="voteMessage && voteRegister">
+		<div class="checkVote mb-4">
+			{{ voteMessage }}
+		</div>
+		<div class="col col-sm-12 col-md-5 m-auto">
+			<button class="btn btn-success btn-danger-green w-100" [routerLink]="['/logout/1']">Cerrar Sesión</button>
+		</div>
+	</div>
+	<div class="doubleVote col col-sm-8" *ngIf="!verifyFlag">
+		<div class="checkVote mb-4">
+			Esta votación no está habilitada en este momento. Estará disponible a partir de: {{category.startDate}} {{category.startTime}} y hasta: {{category.endDate}} {{category.endTime}}
+		</div>
+		<div class="col col-sm-12 col-md-5 m-auto">
+			<button class="btn btn-danger btn-danger-red w-100" [routerLink]="['/logout/1']">Cerrar Sesión</button>
+		</div>
+	</div>
+	<div *ngIf="postulates  && authorization && !voteRegister && verifyFlag">
+		<div class="paginationControls" *ngIf="postulates && postulates.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div>
+		<div class="postulatesContainer col col-sm-8" *ngFor="let postulate of postulates | paginate: {itemsPerPage: itemsPerPage, currentPage: actualPage};">
+			<div class="postulatePhoto col col-sm-12 col-lg-4 d-inline-block">
+				<img src="{{url}}postulates/get/image/{{postulate.photo}}" alt="{{ postulate.name }} {{postulate.surname}}" *ngIf="postulate.photo">
+				<img src="/assets/images/usuarioAnonimo.png" alt="{{ postulate.name }} {{postulate.surname}}" *ngIf="!postulate.photo">
+			</div>
+			<div class="postulateDescription col col-sm-12 col-lg-5 d-inline-block">
+				<span id="name">{{ postulate.name }} {{postulate.surname}}</span>
+				<span id="occupation">{{ postulate.description }}</span>
+			</div>
+			<div class="postulateVote col col-sm-12 col-lg-3 d-inline-block">
+				<button type="button" class="btn" data-toggle="modal" [attr.data-target]="'#myModal'+postulate.id">votar</button>
+			</div>
+			<!-- the Modal -->
+			<div class="modal animated fadeIn faster" id="{{ 'myModal'+postulate.id }}">
+				<div class="modal-dialog">
+					<div class="modal-content">
+		
+						<!-- Modal Header -->
+				    	<div class="modal-header">
+				    		<h4 class="modal-title">Registrar Votación</h4>
+				    		<button type="button" class="close" data-dismiss="modal">&times;</button>
+				    	</div>
+		
+						<!-- Modal body -->
+						<div class="modal-body">
+							Esta seguro que quiere realizar la votación por el postulado: <b style="text-transform: uppercase;">{{postulate.name}} {{postulate.surname}}</b>?
+						</div>
+		
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<a (click)="vote(postulate.id)" class="btn_vote" data-dismiss="modal">Votar</a>
+							<button type="button" class="btn_close" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

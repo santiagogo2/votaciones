@@ -1,0 +1,56 @@
+<div class="col col-sm-12" *ngIf="!category">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="col col-sm-12 col-lg-8 mt-4" style="margin: auto;" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+	<span *ngIf="validationMessage">{{ validationMessage }}</span>
+</div>
+<div class="backLink col-sm-12 col-lg-8" *ngIf="category"><a href="javascript:history.back()">Regresar</a></div>
+<div class="formContainer col-sm-12 col-lg-8" *ngIf="category">
+	<h2 class="formTitle mb-4">{{ page_title }}</h2>
+	<form #votesCategoryEditForm="ngForm" class="form-container" (ngSubmit)="onSubmit()">
+		<div class="form-group col col-sm-12">
+			<label for="name" class="labelForm">Nombre de la categoría*</label>
+			<input type="text" name="name" id="name" class="form-control inputForm" [ngClass]="{'is-invalid': name.invalid && name.touched}" #name="ngModel" [(ngModel)]="category.name" required placeholder="Ingrese el nombre de la categoría de votación">
+			<small class="invalid-feedback d-block" *ngIf="name.invalid && name.touched">Debe ingresar un nombre de la categoría correcto.</small>
+		</div>
+		<div class="form-group">
+			<div class="col col-sm-12 col-lg-6 d-inline-block">
+				<label for="startDate" class="labelForm">Fecha de inicio de la votación</label>
+				<input type="date" name="startDate" id="startDate" class="form-control inputForm" [ngClass]="{'is-invalid': startDate.invalid && startDate.touched}" #startDate="ngModel" [(ngModel)]="category.startDate" placeholder="Ingrese la fecha de inicio de las votaciones" required pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" min="{{year}}-{{month}}-{{day}}">
+			</div>
+			<div class="col col-sm-12 col-lg-6 d-inline-block">
+				<label for="startTime" class="labelForm">Hora de inicio de la votación</label>
+				<input type="time" name="startTime" id="startTime" class="form-control inputForm" [ngClass]="{'is-invalid': startTime.invalid && startTime.touched}" #startTime="ngModel" [(ngModel)]="category.startTime" placeholder="Ingrese la hora de inicio de las votaciones" required>
+			</div>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="startDate.invalid && startDate.touched">Debe ingresar una fecha de inicio</small>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="startTime.invalid && startTime.touched">Debe ingresar una hora de inicio</small>
+		</div>
+		<div class="form-group">
+			<div class="col col-sm-12 col-lg-6 d-inline-block">
+				<label for="endDate" class="labelForm">Fecha de finalización de la votación</label>
+				<input type="date" name="endDate" id="endDate" class="form-control inputForm" [ngClass]="{'is-invalid': endDate.invalid && endDate.touched}" #endDate="ngModel" [(ngModel)]="category.endDate" placeholder="Ingrese la fecha de finalización de las votaciones" required pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" min="{{year}}-{{month}}-{{day}}">
+			</div>
+			<div class="col col-sm-12 col-lg-6 d-inline-block">
+				<label for="endTime" class="labelForm">Hora de finalización de la votación</label>
+				<input type="time" name="endTime" id="endTime" class="form-control inputForm" [ngClass]="{'is-invalid': endTime.invalid && endTime.touched}" #endTime="ngModel" [(ngModel)]="category.endTime" placeholder="Ingrese la hora de finalización de las votaciones" required>
+			</div>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="endDate.invalid && endDate.touched">Debe ingresar una fecha de finalización</small>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="endTime.invalid && endTime.touched">Debe ingresar una hora de finalización</small>
+		</div>
+
+		<div class="buttonSubmit col-sm-12">
+			<input type="submit" value="Actualizar Categoría" class="btn btn-success btnPrefer col-sm-12 col-md-8 col-lg-6" [disabled]="votesCategoryEditForm.invalid">
+		</div>
+		<div id="preloaderDisco" *ngIf="preloaderStatus"></div>
+		<div class="col col-sm-12 info">
+			<small>Los campos marcados con * son obligatorios</small>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,10 @@
+<div class="form-group p-2">
+	<angular-file-uploader class=""
+		[config]="afuConfig"
+		[resetUpload]=resetVar
+		(ApiResponse)="fileUpload($event)">
+	</angular-file-uploader>
+	<div class="mt-2" [ngClass]="{'successMessage':fileStatus=='success', 'errorMessage':fileStatus=='error'}" *ngIf="(fileStatus=='error' || fileStatus=='success') && responseMessage">
+		<span>{{ responseMessage }}</span>
+	</div>
+</div>

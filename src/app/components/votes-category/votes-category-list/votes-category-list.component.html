@@ -1,0 +1,86 @@
+<div class="col col-sm-12" *ngIf="!categories && !responseMessage">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="col col-sm-12 mt-4" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+</div>
+<div class="mb-4" *ngIf="!categories"></div>
+<div class="backLink d-inline-block col-sm-6 p-0" *ngIf="categories">
+	<a class="" href="javascript:history.back()">Regresar</a>
+</div>
+<div class="tableContainer" *ngIf="categories">
+	<h2 class="formTitle">{{ page_title }}</h2>
+	<div class="tableContainerAll col col-sm-12">
+		<div id="preloaderDisco" *ngIf="preloaderStatus" class="mb-4"></div>
+		<div class="paginationControls" *ngIf="categories && categories.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div>
+		<table class="table table-bordered">
+			<thead class="thead_styles">
+				<tr>
+					<th width="50%">Nombres</th>
+					<th width="15%">Fecha de Inicio</th>
+					<th width="15%">Fecha de Finalización</th>
+					<th *ngIf="identity.role!='user'">Acción</th>
+				</tr>
+			</thead>
+			<tbody class="tbody_styles">
+				<tr *ngFor="let category of categories | paginate: {itemsPerPage: itemsPerPage, currentPage: actualPage};" class="tableStyles">
+					<td [routerLink]="['/editar-categorias-votacion/', category.id]" *ngIf="identity.role=='admin'">{{ category.name }}</td>
+					<td *ngIf="identity.role=='jurado'">{{ category.name }}</td>
+					<td [routerLink]="['/editar-categorias-votacion/', category.id]" *ngIf="identity.role=='admin'">{{ category.startDate }} {{category.startTime}}</td>
+					<td *ngIf="identity.role=='jurado'">{{ category.startDate }} {{category.startTime}}</td>
+					<td [routerLink]="['/editar-categorias-votacion/', category.id]" *ngIf="identity.role=='admin'">{{ category.endDate }} {{category.endTime}}</td>
+					<td *ngIf="identity.role=='jurado'">{{ category.endDate }} {{category.endTime}}</td>
+					<td style="padding: 0.55rem" *ngIf="identity.role=='admin'||identity.role=='jurado'">
+						<span [ngClass]="{'d-inline-block col col-sm-12 col-lg-5 p-0 mar-5': category.flag}"><button type="button" class="btn btn-info w-100" data-toggle="modal" [routerLink]="['/ver-resultados/',category.id]" *ngIf="category.flag">Ver Resultados</button></span>
+						<span [ngClass]="{'d-inline-block col col-sm-12 col-lg-5 p-0': category.flag && identity.role=='admin'}"><button *ngIf="identity.role=='admin'" type="button" class="btn btn-danger w-100" data-toggle="modal" [attr.data-target]="'#myModal'+category.id">Borrar</button></span>
+					</td>
+
+					<!-- the Modal -->
+					<div class="modal animated fadeIn faster" id="{{ 'myModal'+category.id }}">
+						<div class="modal-dialog">
+							<div class="modal-content">
+
+								<!-- Modal Header -->
+						    	<div class="modal-header">
+						    		<h4 class="modal-title">Borrar la categoría definitivamente del sistema</h4>
+						    		<button type="button" class="close" data-dismiss="modal">&times;</button>
+						    	</div>
+
+								<!-- Modal body -->
+								<div class="modal-body">
+									Seguro que quieres borrar la categoría: <b>{{ category.name }}</b>?
+								</div>
+
+								<!-- Modal footer -->
+								<div class="modal-footer">
+									<a (click)="deleteVotesCategory(category.id)" class="btn_close" data-dismiss="modal">Eliminar</a>
+									<button type="button" class="btn_secure" data-dismiss="modal">Cerrar</button>
+								</div>
+
+							</div>
+						</div>
+					</div>				
+				</tr>					
+			</tbody>
+		</table>		
+		<div class="paginationControls" *ngIf="categories && categories.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div>
+	</div>
+</div>

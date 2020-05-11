@@ -1,0 +1,55 @@
+<div class="backLink col-sm-12 col-lg-8"><a href="javascript:history.back()">Regresar</a></div>
+<div class="formContainer col-sm-12 col-lg-8">
+	<h2 class="formTitle mb-4">{{ page_title }}</h2>
+	<div class="col-sm-12 form-group">
+		<input type="file" class="inputForm" (change)="addFile($event)" placeholder="upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+		<fa name="cog" animation="spin" *ngIf="preloaderStatus"></fa>
+	</div>
+	<div class="col col-sm-12">
+		<div class="col col-sm-12 form-group" style="margin: auto;" class="errorMessage" *ngIf="status=='error' && responseMessage">
+			<span>{{ responseMessage }}</span><br/>
+		</div>
+	</div>
+	<div *ngIf="!preloaderStatus && users">
+		<div class="paginationControls" *ngIf="users && users.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div>
+		<table class="table table-bordered">
+			<thead class="thead_styles">
+				<tr>
+					<th *ngFor="let head of getKeys(users[0])">{{ head.key }}</th>
+				</tr>
+			</thead>
+			<tbody class="tbody_styles">
+				<tr *ngFor="let user of users | paginate: {itemsPerPage: itemsPerPage, currentPage: actualPage};" class="tableStyles">
+					<td *ngFor="let str of getKeys(user)">{{ str.value }}</td>		
+				</tr>					
+			</tbody>
+		</table>		
+		<div class="paginationControls" *ngIf="users && users.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div>
+		<div class="buttonSubmit col-sm-12" *ngIf="!successesMessage && !errorLoadMessage">
+			<a (click)="registerMassive()" class="btn btn-info btnPrefer" style="color: white">Confirmar</a>
+		</div>
+		<div id="preloaderDisco" *ngIf="preloader2Status"></div>
+		<div class="col col-sm-12 form-group errorMessage infoMessage mt-2" style="margin: auto;" *ngIf="successesMessage">
+			<span>{{ successesMessage }}</span><br/>
+		</div>
+		<div class="col col-sm-12 form-group errorMessage mt-2" style="margin: auto;" *ngIf="errorLoadMessage">
+			<span>{{ errorLoadMessage }}</span><br/>
+		</div>
+		<div class="buttonSubmit col-sm-12" *ngIf="successesMessage || errorLoadMessage">
+			<a [routerLink]="['/listar-usuarios']" class="btn btn-success btnPrefer">Listar Usuarios</a>
+		</div>
+	</div>
+</div>
+

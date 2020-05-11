@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }}</title>
+</head>
+<body>
+	<div class="containerAll">
+		<div class="topBanner">
+			<div class="titleContainer">
+				<div class="headerImage col col-sm-12 col-md-4 d-inline-block animated fadeInLeft">
+					<img class="col-sm-12 col-xl-9" src="assets/images/logoSubred.png" alt="Subred Integrada de Servicios de Salud Sur Logo" title="Subred Integrada de Servicios de Salud Sur Logo">
+				</div>
+				<div class="principalTitle col col-sm-12 col-md-8 d-inline-block animated fadeInLeft delay-05s">
+					<span class="">{{ page_title }}</span>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar navbar-expand-lg navbar-light navbarRendicion">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarRendicion" aria-controls="navbarRendicion" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		
+			<div class="collapse navbar-collapse" id="navbarRendicion">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item" *ngIf="!identity">
+						<a class="nav-link" [routerLink]="['/iniciar-sesion']" [routerLinkActive]="'activeNavbar'">Iniciar sesión</a>
+					</li>
+					<li class="nav-item" *ngIf="identity">
+						<a class="nav-link" [routerLink]="['/inicio']" [routerLinkActive]="'activeNavbar'">Inicio</a>
+					</li>
+					<li class="nav-item" *ngIf="identity && identity.role == 'admin'">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdownRendicion1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Postulados
+						</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownRendicion1">
+							<a class="dropdown-item" [routerLink]="['/listar-postulados']" [routerLinkActive]="['active']">Listar Postulados</a>
+							<a class="dropdown-item" [routerLink]="['/registrar-postulado']" [routerLinkActive]="['active']">Agregar Postulado</a>
+						</div>
+					</li>
+					<li class="nav-item" *ngIf="identity && identity.role != 'user'">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdownRendicion1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Categoría de Votación
+						</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownRendicion1">
+							<a class="dropdown-item" [routerLink]="['/listar-categorias-votacion']" [routerLinkActive]="['active']">Listar Categorías</a>
+							<a *ngIf="identity.role=='admin'" class="dropdown-item" [routerLink]="['/registrar-categorias-votacion']" [routerLinkActive]="['active']">Agregar Categoría</a>
+						</div>
+					</li>
+				</ul>
+				<ul class="navbar-nav my-2 my-lg-0 menuUser">
+					<li class="nav-item dropdown" *ngIf="identity">
+						<a class="nav-link dropdown-toggle" href="#" id="votaciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{ identity.name + ' ' + identity.surname }}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="votaciones" *ngIf="identity.role == 'admin'">
+							<a class="dropdown-item" [routerLink]="['/listar-usuarios']" [routerLinkActive]="'active'">Listar Usuarios</a>
+							<a class="dropdown-item" [routerLink]="['/registrar-usuario']" [routerLinkActive]="'active'">Agregar Usuario</a>
+							<a class="dropdown-item" [routerLink]="['/registrar-usuarios-masivo']" [routerLinkActive]="'active'">Subir Usuarios</a>
+							<a class="dropdown-item" [routerLink]="['/logout/1']" [routerLinkActive]="'active'">Cerrar Sesión</a>
+						</div>
+						<div class="dropdown-menu" aria-labelledby="votaciones" *ngIf="identity.role != 'admin'">
+							<a class="dropdown-item" [routerLink]="['/logout/1']" [routerLinkActive]="'active'">Cerrar Sesión</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="container animated fadeIn delay-05s" style="animation-fill-mode: unset; min-height: 524px; display: flow-root;">
+			<router-outlet></router-outlet>
+		</div>
+		<div class="footer" style="bottom: 0">
+			<span class="d-block animated fadeIn">Copyright© 2020</span>
+			<span class="d-block animated fadeIn delay-05s">Subred Integrada de Servicios de Salud Sur E.S.E.</span>
+			<span class="d-block animated fadeIn delay-1s">Todos los derechos reservados</span>
+		</div>
+	</div>
+</body>
+</html>

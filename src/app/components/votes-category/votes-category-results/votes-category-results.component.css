@@ -1,0 +1,36 @@
+.tableContainer{
+	margin-bottom: 4rem;
+}
+.resultsContainer{
+	margin: auto;
+}
+.principal{
+	text-transform: uppercase;
+	color: #009ADB;
+	font-size: 1.1rem;
+	padding: 1rem 0;
+	border-bottom: 2px solid #002A50;
+	font-weight: 600;
+}
+.result{
+	padding: 1rem 0;
+	border: 2px solid transparent;
+	border-bottom: 1px solid #CCC;
+	border-top: unset;
+	cursor: default;
+	font-size: 0.9rem;
+}
+.result:hover{
+	border-left: 2px solid #002A50;
+	border-right: 2px solid #002A50;
+	border-bottom-color: #CCC;
+	background: #F1F1F1;
+	color: #002A50;
+}
+.rowPostulate{
+	width: 100%;
+	text-align: center;
+}
+.rowPostulate div{
+	display: inline-block;
+}

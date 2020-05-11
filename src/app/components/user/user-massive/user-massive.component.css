@@ -1,0 +1,8 @@
+.tableStyles{
+	cursor: default !important;
+}
+.infoMessage{
+	border-color: #1BB5CE !important;
+	background-color: #3ACBE2 !important;
+	color: #FFF !important;
+}

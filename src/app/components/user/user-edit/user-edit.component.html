@@ -1,0 +1,64 @@
+<div class="col col-sm-12" *ngIf="!user && !roles && !responseMessage && !voteCategories">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="col col-sm-12 col-lg-8 mt-4" style="margin: auto;" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+	<span *ngIf="validationMessage">{{ validationMessage }}</span>
+</div>
+<div class="mb-4" *ngIf="!user && !voteCategories"></div>
+<div class="backLink col-sm-12 col-lg-8" *ngIf="user && roles"><a href="javascript:history.back()">Regresar</a></div>
+<div class="formContainer col-sm-12 col-lg-8" *ngIf="user && roles && voteCategories">
+	<h2 class="formTitle mb-4">{{ page_title }}</h2>
+	<form #userEditForm="ngForm" class="form-container" (ngSubmit)="onSubmit()">
+		<div class="form-group col col-sm-12">
+			<label for="text" class="labelForm">Número de cédula*</label>
+			<input type="id_number" name="id_number" id="id_number" class="form-control inputForm" [ngClass]="{'is-invalid': id_number.invalid && id_number.touched}" #id_number="ngModel" [(ngModel)]="user.id_number" required pattern="[0-9]+" placeholder="Ingrese el correo del usuario">
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="id_number.invalid && id_number.touched">Debe ingresar un correo válido</small>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-12 col-md-12 col-lg-6 d-inline-block">
+				<label for="name" class="labelForm">Nombres*</label>
+				<input type="text" name="name" id="name" class="form-control inputForm" [ngClass]="{'is-invalid': name.invalid && name.touched}" #name="ngModel" [(ngModel)]="user.name" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ingrese los nombres del usuario">
+			</div>
+			<div class="col-sm-12 col-md-12 col-lg-6 d-inline-block">
+				<label for="surname" class="labelForm">Apellidos*</label>
+				<input type="text" name="surname" id="surname" class="form-control inputForm" [ngClass]="{'is-invalid': surname.invalid && surname.touched}" #surname="ngModel" [(ngModel)]="user.surname" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ingrese los apellidos del usuario">
+			</div>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="name.invalid && name.touched">Debe ingresar correctamente los nombres del usuario. Solo se admiten letras en el campo</small>
+			<small class="invalid-feedback d-block col col-sm-12" *ngIf="surname.invalid && surname.touched">Debe ingresar correctamente los apellidos del usuario. Solo se admiten letras en el campo</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<label for="role" class="labelForm">Role*</label>
+			<select style="background-position-x: 96%" name="role" id="role" class="form-control inputForm" [ngClass]="{'is-invalid': role.invalid && role.touched}" #role="ngModel" [(ngModel)]="user.role" required>
+				<option *ngFor="let role of roles" value="{{ role.value }}">{{ role.name }}</option>
+			</select>
+			<small class="invalid-feedback d-block" *ngIf="role.invalid && role.touched">Debe seleccionar un rol de la lista desplegable</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<input type="checkbox" name="selectAll" id="selectAll" (change)="checkUncheckAll()" [(ngModel)]="selectedAll"><label class="checkbox titleForm" for="selectAll">Votaciones Autorizadas*</label>
+			<div class="col-lg-12 d-inline-block pl-3 align-top" *ngFor="let category of voteCategories">
+				<input (change)="setVoteCategory()" type="checkbox" [(ngModel)]="category.isSelected" name="{{'category' + category.id}}" id="{{'category' + category.id}}" value="{{category.id}}"><label class="checkbox" for="{{'category' + category.id}}">{{category.name}}</label>
+			</div>						
+			<small class="invalid-feedback d-block" *ngIf="!categoryFlag">
+				Debe seleccionar al menos una votación para el usuario
+			</small>
+		</div>
+		<div class="form-group col col-sm-12">
+			<small><a [routerLink]="['/editar-password-usuario/', user.id]">Actualizar Contraseña</a></small>
+		</div>
+
+		<div class="buttonSubmit col-sm-12">
+			<input type="submit" value="Actualizar Usuario" class="btn btn-success btnPrefer col-sm-12 col-md-8 col-lg-6" [disabled]="userEditForm.invalid || !categoryFlag">
+		</div>
+		<div id="preloaderDisco" *ngIf="preloader2Status"></div>
+		<div class="col col-sm-12 info">
+			<small>Los campos marcados con * son obligatorios</small>
+		</div>
+	</form>
+</div>

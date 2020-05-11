@@ -1,0 +1,18 @@
+#accordion{
+	margin-bottom: 2rem;
+}
+.card-header{
+	text-align: center;
+	border: 1px solid #DEDEDE !important;
+	padding: 0 !important;
+	background-color: #DEDEDE;
+	transition: all 0.3s ease;
+}
+.card-header:hover{
+	background-color: #CCC;
+	border-color: #CCC !important;
+}
+.card-header button{
+	width: 100%;
+	font-size: 0.8rem;
+}

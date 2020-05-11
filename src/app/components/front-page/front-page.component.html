@@ -1,0 +1,45 @@
+<div class="col col-sm-12" *ngIf="!categories && !responseMessage">
+	<div id="preloaderSerpiente">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+	</div>
+</div>
+<div class="col col-sm-12 mt-4" [ngClass]="{'successMessage':status=='success', 'errorMessage':status=='error'}" *ngIf="(status=='error' || status=='success') && responseMessage">
+	<span>{{ responseMessage }}</span><br/>
+</div>
+<div class="mb-4" *ngIf="!categories"></div>
+<div class="backLink d-inline-block col-sm-6 p-0" *ngIf="categories">
+	<a class="" href="javascript:history.back()">Regresar</a>
+</div>
+<div class="tableContainer" *ngIf="categories">
+	<h2 class="formTitle">{{ page_title }}</h2>
+	<div class="categoriesContainer col col-sm-12 col-md-8 col-lg-6">
+		<!-- <div class="paginationControls" *ngIf="categories && categories.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div> -->
+		<div class="categoryRow" *ngIf="categories.length == 0">
+			<div class="noCategoryAvaliable">
+				No hay votaciones activas en este momento
+			</div>
+		</div>
+		<div class="categoryRow" *ngFor="let category of categories">
+			<div class="voteCategory" [routerLink]="['/votar', category.id]">
+				{{category.name}}
+			</div>
+		</div>		
+		<!-- <div class="paginationControls" *ngIf="categories && categories.length > itemsPerPage">
+			<pagination-controls (pageChange)="pageChange($event)"
+								 previousLabel="Anterior"
+								 nextLabel="Siguiente"
+								 maxSize="4">
+			</pagination-controls>
+		</div> -->
+	</div>
+</div>
